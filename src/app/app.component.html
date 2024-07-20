@@ -1,1 +1,63 @@
-<h1>{{title}}</h1>
+<h1>First Angular App</h1>
+<!-- Data binding/string interpolation -->
+<h2> {{ title }} </h2>
+<!-- <img src="{{imgURL}}" alt=""> -->
+
+<!-- 1. Property binding -->
+<!-- <img [src]="imgURL" alt=""> -->
+
+<button disabled="{{isDisabled}}">Disable button using string interpolation</button>
+<button [disabled]="isDisabled">Disable using property binding</button>
+
+<!-- 2. Class binding -->
+ <button 
+  [class.active]="isActive" 
+  [class.no-active]="!isActive"
+  [class.active-border]="isActive"
+  [class.no-active-border]="!isActive"
+ >Click me</button>
+
+ <!-- 2.1 aternatively -->
+  <button [class.active]="isActive">Class Binding</button>
+
+ <button [class.apple]="fruitName == 'apple' ">Fruit Ninja</button>
+
+<!-- 3. style binding -->
+<button [style.background]="isActive? 'red' : 'green' ">Click</button>
+
+<!-- 3.1 DOM style properties -->
+<button 
+ [style.backgroundColor]="isActive? 'red' : 'green' "
+ [style.border]="isActive? '3px solid yellow' : '' "
+>Click</button>
+
+<!-- 3. Event Binding -->
+ <button (click)="buttonClick()">Click me</button>
+
+ <input type="text" (keyup)="keyEnter()">
+
+<!-- 3.1 Event filtering using vanilla javascript -->
+ <input type="text" (keyup)="keyEnterJs($event)">
+
+<!-- 3.2 Event filtering!!! using angular way  -->
+ <input type="text" (keyup.enter)="keyupFiltering()">
+
+<!-- 4 angular template variable to capture data input values -->
+ <input type="text" (keyup.enter)="keyupFilteringA(user)" #user id="userInput">
+
+<!-- 5 Two way data binding using template variable -->
+ <input type="text" [value]="userName" #username (keyup.enter)="updateUserName(username)">
+
+<!-- 5.1 Two way data binding!! in angular way (FormsModule) -->
+ <input type="text" [(ngModel)]="userName">
+
+ <h3> {{ userName }} </h3>
+
+<!-- one-way and Two-way data binding -->
+ <!-- 6.1 one-way data binding -->
+ <input type="text" [value]="textValue" (keyup.enter)="onKeyUpDataOne()">
+
+ <br>
+
+ <!-- 6.2 Two-way data binding -->
+  <input type="text" [(ngModel)]="textValue" (keyup.enter)="onKeyUpDataTwo()">
