@@ -1,1 +1,255 @@
-<h1>{{title}}</h1>
+<!-- 1.1 old-way -->
+ <!-- 1.1.1 *ngIf Directive -->
+  <h2 *ngIf="isLoggedIn"> {{ userName }} </h2>
+
+  <!-- Approach of Else condition -->
+   <h4 *ngIf="!isLoggedIn"> User is not logged in </h4>
+
+<!-- 1.2 new-way  -->
+ <!-- 2.2.1 @If syntax -->
+  @if (isLoggedIn) {
+      <h3> {{ userName }} </h3>
+  }
+  <!-- Approach of Else condition -->
+  @else {
+    <h4> User is not logged in (loaded using if syntax block) </h4>
+  }
+
+   @if (!isLoggedIn) {
+    <h4> User is not logged in (loaded using if syntax block) </h4>
+   }
+
+<!-- 2.1 Angular  Ng-Template  -->
+<h2 *ngIf="isLoggedIn; else message"> {{ userName }} </h2>
+
+ <ng-template #message>
+     <h4> User is not logged in (Loaded using ng-template) </h4>
+ </ng-template>
+
+<!-- Part 02 - Angular Directives (Deep Dive)  -->
+ <!-- @if, @else syntax Approach  -->
+  @if (isAdmin) {
+    <h4> Welcome Admin </h4>
+  }
+  @else if (isMember) {
+    <h4> Welcome Member </h4>
+  }
+  @else if (isGuest) {
+    <h4> Welcome Guest </h4>
+  }
+
+  <!-- if Directive with Number values  -->
+  <!-- 1.0 old-way approach  -->
+   <button (click)="countLoginAttempts()" *ngIf="loginCount < 3" >Log In</button>
+
+   <h4 *ngIf="loginCount > 3 ">Exceeded 3 login Attempts, Try Again Later</h4>
+
+   <!-- 2.0 new-way approach  -->   
+   @if (loginCount < 3) {
+      <button (click)="countLoginAttempts()">Login Syntax</button>
+    }
+
+    @if (loginCount > 3) {
+      <h4>Exceeded 3 login Attempts, Try Again Later</h4>
+    }
+
+  <!-- if Directive with String Values  -->
+   <!-- old-way  -->
+   <h4 *ngIf="userRole == 'Admin' else memberMessage ">Welcome Admin</h4>
+
+   <ng-template #memberMessage>
+    <h4>Welcome Member</h4>
+   </ng-template>
+
+   <!-- new-way  -->
+    @if (userRole == 'Admin') {
+      <h4>Welcome Admin</h4>
+    }
+    @else if (userRole == 'Member') {
+      <h4>Welcome Member</h4>
+    }
+
+<!-- part 03 - ng-template  -->
+ <h4 *ngIf="userRole == 'Admin'; else dynamicTemplate ">Welcomen Admin</h4>
+
+ <ng-template #dynamicTemplate>
+  <p>This is inside ng-template</p>
+ </ng-template>
+
+ <!-- ng-template oulet approach  -->
+  <ng-template #callToAction>
+    <p>Call To Action</p>
+    <button>Join Now</button>
+  </ng-template>
+
+  <div [ngTemplateOutlet] = "callToAction" >
+    <h5>Sidebar</h5>
+  </div>
+  <div [ngTemplateOutlet] = "callToAction" >
+    <h5>Hero</h5>
+  </div>
+  <div [ngTemplateOutlet] = "callToAction" >
+    <h5>Footer</h5>
+  </div>
+
+<!-- part 04 - @for Directive  -->
+ <!-- Ng For Directive  -->
+  <!-- old-way  -->
+  <!-- 1. string interpolation approach  -->
+  <h3> {{ users }} </h3>
+
+   <h3> {{ users[0] }} </h3>
+   <h3> {{ users[1] }} </h3>
+   <h3> {{ users[2] }} </h3>
+   <h3> {{ users[3] }} </h3>
+
+  <!-- 2. using ngFor -->
+   <p>Loaded Using NgFor</p>
+   <h3 *ngFor="let user of users" > {{ user }} </h3>
+
+  <!-- new-way  -->
+   <p>For syntax Approach</p>
+
+   @for (user of users; track user) {
+    <h3> {{ user }} - Loaded Using For Syntax Block </h3>
+   }
+
+   <!-- Fetch Unordered List  -->
+    <!-- old-way  -->
+    <ul>
+      <li *ngFor="let user of users"> {{ user }} </li>
+    </ul>
+
+    <!-- new-way  -->
+     <ul>
+       @for (user of users; track user) {
+        <li> {{ user }} </li>
+       }
+     </ul>
+
+  <!-- part 05 -Fetch Array of Objects  -->
+   <!-- old-way  -->
+   <ul>
+    <li *ngFor="let user of usersObj"> {{ user.name }} <button (click)="onDelete(user)" >Delete</button> </li>
+   </ul>
+
+   <!-- new-way  -->
+    <ul>
+      @for (user of usersObj; track user) {
+        <li> {{ user.name }} </li>
+      }
+    </ul>
+
+<!-- Change Detection  -->
+ <button (click)="addNewUser()">Add New User</button>
+
+<!-- part 06 index of For Loop  -->
+ <!-- old-way  -->
+  <ul>
+    <li *ngFor="let user of usersObj; let i = index"> {{i}} {{ user.name }} <button (click)="onDelete(1)" >Delete</button> </li>
+   </ul>
+
+   <!-- new-way  -->
+   <ul>
+    @for (user of usersObj; track user; let i = $index) {
+      <li> {{i}} {{ user.name }} <button (click)="onDelete(i)" >Delete</button> </li>
+    }
+  </ul>
+
+  <!-- length count  -->
+   <!-- old-way  -->
+   <ul>
+    <li *ngFor="let user of usersObj; let i = index"> {{ usersObj.length }} {{i}} {{ user.name }} <button (click)="onDelete(1)" >Delete</button> </li>
+   </ul>
+  
+   <!-- new-way  -->
+  <ul>
+    @for (user of usersObj; track user; let i = $index) {
+      <li> {{ usersObj.length }} - {{i}} {{ user.name }} <button (click)="onDelete(i)" >Delete</button> </li>
+    }
+  </ul>
+
+  <!-- NgFor count  -->
+   <!-- old-way  -->
+   <ul>
+    <li *ngFor="let user of usersObj; let i = index; let usersCount = count" > {{ usersCount }} {{i}} {{ user.name }} <button (click)="onDelete(1)" >Delete</button> </li>
+   </ul>
+
+   <!-- new-way  -->
+   <ul>
+    @for (user of usersObj; track user; let i = $index; let usersCount = $count) {
+      <li> {{usersCount}} {{i}} {{ user.name }} <button (click)="onDelete(i)" >Delete</button> </li>
+    }
+  </ul>
+
+  <!-- Handling Empty Array  -->
+   <!-- using length  -->
+    <!-- old-way  -->
+   <div *ngIf="usersObjA.length == 0">
+    <p>No Users to Display</p>
+   </div>
+
+    <ul>
+      <li *ngFor="let user of usersObjA; let i = index; let usersCount = count" > {{ usersCount }} {{i}} {{ user.name }} <button (click)="onDelete(1)" >Delete</button> </li>
+    </ul>
+
+    <button (click)="addNewUserA()">Add New UserA</button>
+
+    <!-- new-way  -->
+    <ul>
+
+      @if(usersObjA.length == 0) {
+        <p>No Users to Display - Loaded Using Syntax</p>
+      }
+
+      @for (user of usersObjA; track user; let i = $index; let usersCount = $count) {
+        <li> {{usersCount}} {{i}} {{ user.name }} <button (click)="onDelete(i)" >Delete</button> </li>
+      }
+    </ul>
+
+    <button (click)="addNewUserA()">Add New UserA</button>
+
+    <!-- alternatively  -->
+    <ul>
+
+      @for (user of usersObjA; track user; let i = $index; let usersCount = $count) {
+        <li> {{usersCount}} {{i}} {{ user.name }} <button (click)="onDelete(i)" >Delete</button> </li>
+      }
+      @empty {
+        <p>No Users to Display - Loaded Using Empty Syntax</p>
+      }
+
+    </ul>
+
+    <button (click)="addNewUserA()">Add New UserA</button>
+
+<!-- Properties - For Loop: First, Last, Even, Odd  -->
+ <!-- First  -->
+<ul>
+
+  @for (user of usersObjA; track user; let i = $index; let usersCount = $count; let first = $first; let last = $last; let even = $even; let odd = $odd) {
+    <li> {{odd}} {{usersCount}} {{i}} {{ user.name }} <button (click)="onDelete(i)" >Delete</button> </li>
+  }
+  @empty {
+    <p>No Users to Display - Loaded Using Empty Syntax</p>
+  }
+
+</ul>
+
+<button (click)="addNewUserA()">Add New UserA</button>
+
+<!-- NgSwitchCase  -->
+<div [ngSwitch]="usersRoleA">
+  <p *ngSwitchCase=" 'Admin' " >Welcome Admin</p>
+  <p *ngSwitchCase=" 'Member' " >Welcome Member</p>
+  <p *ngSwitchCase=" 'Editor' " >Welcome Editor</p>
+</div>
+
+<!-- NgSwitchDefault  -->
+<div [ngSwitch]="usersRoleA">
+  <p *ngSwitchCase=" 'Admin' " >Welcome Admin</p>
+  <p *ngSwitchCase=" 'Member' " >Welcome Member</p>
+  <p *ngSwitchCase=" 'Editor' " >Welcome Editor</p>
+
+  <p *ngSwitchDefault >Please Login</p>
+</div>
